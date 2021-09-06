@@ -59,5 +59,6 @@
       "**/hardhat",
       "**/hardhat/**"
     ]
-  }
+  },
+  "dependencies": {}
 }

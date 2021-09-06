@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { BigNumber } from "@ethersproject/bignumber";
 import { hexlify } from "@ethersproject/bytes";
 import { Row, Col, Input, Divider, Tooltip, Button } from "antd";
+import { Box, Heading, HStack } from "@chakra-ui/react";
 import { Transactor } from "../../helpers";
 import tryToDisplay from "./utils";
 import Blockies from "react-blockies";
@@ -26,71 +27,21 @@ export default function FunctionForm({ contractFunction, functionInfo, provider,
     let buttons = ""
     if (input.type === "bytes32") {
       buttons = (
-        <Tooltip placement="right" title={"to bytes32"}>
-          <div
-            type="dashed"
-            style={{ cursor: "pointer" }}
-            onClick={async () => {
-              if (utils.isHexString(form[key])) {
-                const formUpdate = { ...form };
-                formUpdate[key] = utils.parseBytes32String(form[key]);
-                setForm(formUpdate);
-              } else {
-                const formUpdate = { ...form };
-                formUpdate[key] = utils.formatBytes32String(form[key]);
-                setForm(formUpdate);
-              }
-            }}
-          >
-            #️⃣
-            </div>
-        </Tooltip>
+        <></>
       )
     } else if (input.type === "bytes") {
       buttons = (
-        <Tooltip placement="right" title={"to hex"}>
-          <div
-            type="dashed"
-            style={{ cursor: "pointer" }}
-            onClick={async () => {
-              if (utils.isHexString(form[key])) {
-                const formUpdate = { ...form };
-                formUpdate[key] = utils.toUtf8String(form[key]);
-                setForm(formUpdate);
-              } else {
-                const formUpdate = { ...form };
-                formUpdate[key] = utils.hexlify(utils.toUtf8Bytes(form[key]))
-                setForm(formUpdate);
-              }
-            }}
-          >
-            #️⃣
-            </div>
-        </Tooltip>
+        <></>
       )
     } else if (input.type == "uint256") {
       buttons = (
-        <Tooltip placement="right" title={"* 10 ** 18"}>
-          <div
-            type="dashed"
-            style={{ cursor: "pointer" }}
-            onClick={async () => {
-              const formUpdate = { ...form };
-              formUpdate[key] = utils.parseEther(form[key])
-              setForm(formUpdate);
-            }}
-          >
-            ✴️
-            </div>
-        </Tooltip>
+        <></>
       )
     } else if (input.type == "address") {
       const possibleAddress = form[key]&&form[key].toLowerCase&&form[key].toLowerCase().trim()
       if(possibleAddress && possibleAddress.length==42){
         buttons = (
-          <Tooltip placement="right" title={"blockie"}>
-            <Blockies seed={possibleAddress} scale={3} />
-          </Tooltip>
+          <></>
         )
       }
     }
@@ -164,9 +115,9 @@ export default function FunctionForm({ contractFunction, functionInfo, provider,
     inputs.push(txValueInput);
   }
 
-  const buttonIcon = functionInfo.type === "call" ? <Button style={{ marginLeft: -32 }}>Read📡</Button> : <Button style={{ marginLeft: -32 }}>Send💸</Button>;
+  const buttonIcon = functionInfo.type === "call" ? <Button style={{ marginLeft: -32 }}>Read📡</Button> : <Button>Mint</Button>;
   inputs.push(
-    <div style={{ cursor: "pointer", margin: 2 }} key={"goButton"}>
+    <Box sx={{ cursor: "pointer", margin: 2, flex: "0 0 auto", textAlign: "left" }} key={"goButton"}>
       <Input
         onChange={e => setReturnValue(e.target.value)}
         defaultValue=""
@@ -222,26 +173,36 @@ export default function FunctionForm({ contractFunction, functionInfo, provider,
           </div>
         }
       />
-    </div>,
+    </Box>
   );
-
-  return (
-    <div>
-      <Row>
-        <Col
-          span={8}
-          style={{
-            textAlign: "right",
-            opacity: 0.333,
-            paddingRight: 6,
-            fontSize: 24,
-          }}
-        >
-          {functionInfo.name}
-        </Col>
-        <Col span={16}>{inputs}</Col>
-      </Row>
-      <Divider />
-    </div>
-  );
+  console.log(functionInfo);
+  if (functionInfo.name === "claim" || functionInfo.name === "discoverEncounters") {
+    return (
+      <Box>
+        <Box d="flex">
+          <Box
+            sx={{
+              textAlign: "right",
+              opacity: 0.6,
+              paddingRight: 6,
+              fontSize: 24,
+              flex: "0 0 33%",
+              width: "33%",
+            }}
+          >
+            {functionInfo.name}
+          </Box>
+          <Box sx={{
+            flex: "1 1 66%",
+            textAlign: "left",
+          }}>
+            {inputs}
+          </Box>
+        </Box>
+        <Divider />
+      </Box>
+    );
+  } else {
+    return "";
+  }
 }

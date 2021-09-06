@@ -2,7 +2,7 @@ import React from "react";
 import Blockies from "react-blockies";
 import { Typography, Skeleton } from "antd";
 import { useLookupAddress } from "../hooks";
-import { useThemeSwitcher } from "react-css-theme-switcher";
+import { Box, Stack, HStack } from "@chakra-ui/react";
 
 // changed value={address} to address={address}
 
@@ -39,7 +39,7 @@ export default function Address(props) {
 
   const ens = useLookupAddress(props.ensProvider, address);
 
-  const { currentTheme } = useThemeSwitcher();
+  // const { currentTheme } = useThemeSwitcher();
 
   if (!address) {
     return (
@@ -62,11 +62,18 @@ export default function Address(props) {
   const etherscanLink = blockExplorerLink(address, props.blockExplorer);
   if (props.minimized) {
     return (
-      <span style={{ verticalAlign: "middle" }}>
-        <a style={{ color: currentTheme == "light" ? "#222222" : "#ddd" }} target={"_blank"} href={etherscanLink} rel="noopener noreferrer">
-          <Blockies seed={address.toLowerCase()} size={8} scale={2} />
+      <HStack sx={{
+        "a": {
+          color: "primaryAlpha.400"
+        },
+        ".ant-typography-copy": {
+          color: "secondaryAlpha.900"
+        }
+      }}>
+        <a target={"_blank"} href={etherscanLink} rel="noopener noreferrer">
+          <Blockies seed={address.toLowerCase()} size={4} />
         </a>
-      </span>
+      </HStack>
     );
   }
 
@@ -74,7 +81,7 @@ export default function Address(props) {
   if (props.onChange) {
     text = (
       <Text editable={{ onChange: props.onChange }} copyable={{ text: address }}>
-        <a style={{ color: currentTheme == "light" ? "#222222" : "#ddd" }} target={"_blank"} href={etherscanLink} rel="noopener noreferrer">
+        <a target={"_blank"} href={etherscanLink} rel="noopener noreferrer">
           {displayAddress}
         </a>
       </Text>
@@ -82,7 +89,7 @@ export default function Address(props) {
   } else {
     text = (
       <Text copyable={{ text: address }}>
-        <a style={{ color: currentTheme == "light" ? "#222222" : "#ddd" }} target={"_blank"} href={etherscanLink} rel="noopener noreferrer">
+        <a target={"_blank"} href={etherscanLink} rel="noopener noreferrer">
           {displayAddress}
         </a>
       </Text>
@@ -90,11 +97,17 @@ export default function Address(props) {
   }
 
   return (
-    <span>
-      <span style={{ verticalAlign: "middle" }}>
-        <Blockies seed={address.toLowerCase()} size={8} scale={props.fontSize?props.fontSize/7:4} />
-      </span>
-      <span style={{ verticalAlign: "middle", paddingLeft: 5, fontSize: props.fontSize?props.fontSize:28 }}>{text}</span>
-    </span>
+    <HStack sx={{
+      "a": {
+        color: "primaryAlpha.400"
+      },
+      ".ant-typography-copy": {
+        color: "secondaryAlpha.900"
+      }
+    }}>
+
+      <Blockies seed={address.toLowerCase()} size={4} scale={props.fontSize ? props.fontSize / 7 : 4} />
+      <span style={{ paddingLeft: 5, fontSize: props.fontSize ? props.fontSize : 28 }}>{text}</span>
+    </HStack>
   );
 }

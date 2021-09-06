@@ -56,13 +56,12 @@ export default function Wallet(props) {
         onClick={() => {
           setOpen(!open);
         }}
-        rotate={-90}
+        rotate={open ? 0 : -90}
         style={{
           padding: 7,
           color: props.color ? props.color : "",
           cursor: "pointer",
           fontSize: 28,
-          verticalAlign: "middle",
         }}
       />
     </Tooltip>

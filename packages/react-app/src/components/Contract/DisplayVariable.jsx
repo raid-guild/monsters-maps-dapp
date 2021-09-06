@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/accessible-emoji */
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useEffect, useCallback } from "react";
-import { Row, Col, Divider } from "antd";
+import { Box, Heading, HStack } from "@chakra-ui/react";
 import tryToDisplay from "./utils";
 
 const DisplayVariable = ({ contractFunction, functionInfo, refreshRequired, triggerRefresh}) => {
@@ -22,32 +22,29 @@ const DisplayVariable = ({ contractFunction, functionInfo, refreshRequired, trig
   }, [refresh, refreshRequired, contractFunction]);
 
   return (
-    <div>
-      <Row>
-        <Col
-          span={8}
-          style={{
+    <Box>
+      <Box d="flex">
+        <Box
+          sx={{
             textAlign: "right",
-            opacity: 0.333,
+            opacity: 0.6,
             paddingRight: 6,
             fontSize: 24,
+            flex: "0 0 33%",
+            width: "33%",
           }}
         >
           {functionInfo.name}
-        </Col>
-        <Col span={14}>
-          <h2>{tryToDisplay(variable)}</h2>
-        </Col>
-        <Col span={2}>
-          <h2>
-            <a href="#" onClick={refresh}>
-              🔄
-            </a>
-          </h2>
-        </Col>
-      </Row>
-      <Divider />
-    </div>
+        </Box>
+        <Box sx={{
+          d: "inline-flex",
+          flex: "1 1 66%",
+          fontSize: 24
+        }}>
+          <span>{tryToDisplay(variable)}</span>
+        </Box>
+      </Box>
+    </Box>
   );
 };
 

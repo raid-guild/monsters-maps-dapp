@@ -1,35 +1,15 @@
 import React, { useMemo, useState } from "react";
 import { Card } from "antd";
+import { Box, HStack, Heading } from "@chakra-ui/react";
 import { useContractLoader, useContractExistsAtAddress } from "../../hooks";
 import Account from "../Account";
 import DisplayVariable from "./DisplayVariable";
 import FunctionForm from "./FunctionForm";
 
 const noContractDisplay = (
-  <div>
+  <Box>
     Loading...{" "}
-    <div style={{ padding: 32 }}>
-      You need to run{" "}
-      <span class="highlight" style={{ marginLeft: 4, /*backgroundColor: "#f1f1f1",*/ padding: 4, borderRadius: 4, fontWeight: "bolder" }}>
-        yarn run chain
-      </span>{" "}
-      and{" "}
-      <span class="highlight" style={{ marginLeft: 4, /*backgroundColor: "#f1f1f1",*/ padding: 4, borderRadius: 4, fontWeight: "bolder" }}>
-        yarn run deploy
-      </span>{" "}
-      to see your contract here.
-    </div>
-    <div style={{ padding: 32 }}>
-      <span style={{ marginRight: 4 }} role="img" aria-label="warning">
-        ☢️
-      </span>
-      Warning: You might need to run
-      <span class="highlight" style={{ marginLeft: 4, /*backgroundColor: "#f1f1f1",*/ padding: 4, borderRadius: 4, fontWeight: "bolder" }}>
-        yarn run deploy
-      </span>{" "}
-      <i>again</i> after the frontend comes up!
-    </div>
-  </div>
+  </Box>
 );
 
 const isQueryable = fn => (fn.stateMutability === "view" || fn.stateMutability === "pure") && fn.inputs.length === 0;
@@ -77,12 +57,20 @@ export default function Contract({ customContract, account, gasPrice, signer, pr
   });
 
   return (
-    <div style={{ margin: "auto", width: "70vw" }}>
+    <Box sx={{
+      margin: "auto", flex: "0 0 49%", width: "49%", color: "primaryAlpha.200", bg: "secondaryAlpha.100",
+      borderRadius: "8px",
+      overflow: "hidden",
+      ".ant-card": {
+        border: "0px solid transparent",
+        color: "primaryAlpha.200",
+      }
+    }}>
       <Card
         title={
-          <div>
-            {name}
-            <div style={{ float: "right" }}>
+          <Box d="flex" flexFlow="row nowrap" alignContent="center" justifyContent="space-between">
+            <Heading size="lg">{name} Contract</Heading>
+            <Box>
               <Account
                 address={address}
                 localProvider={provider}
@@ -91,16 +79,16 @@ export default function Contract({ customContract, account, gasPrice, signer, pr
                 price={price}
                 blockExplorer={blockExplorer}
               />
-              {account}
-            </div>
-          </div>
+              {/* {account} */}
+            </Box>
+          </Box>
         }
         size="large"
-        style={{ marginTop: 25, width: "100%" }}
+        style={{ marginTop: 25, width: "100%", backgroundColor: "transparent" }}
         loading={contractDisplay && contractDisplay.length <= 0}
       >
         {contractIsDeployed ? contractDisplay : noContractDisplay}
       </Card>
-    </div>
+    </Box>
   );
 }

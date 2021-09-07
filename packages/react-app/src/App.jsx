@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
 import "antd/dist/antd.css";
-import {  StaticJsonRpcProvider, JsonRpcProvider, Web3Provider } from "@ethersproject/providers";
+import { StaticJsonRpcProvider, JsonRpcProvider, Web3Provider } from "@ethersproject/providers";
+import { BigNumber } from "@ethersproject/bignumber";
 import "./App.css";
 import { Spin, Row, Col, Menu, Alert, Switch as SwitchD } from "antd";
 import { LogoutOutlined, SendOutlined, CloseCircleOutlined } from "@ant-design/icons";
@@ -152,9 +153,11 @@ function App(props) {
 
   const yourMapsBalancetoNumber = yourMapsBalance && yourMapsBalance.toNumber && yourMapsBalance.toNumber()
 
+
   useEffect(() => {
     const connected = window.localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER');
     connected && setUserLoggedIn(true);
+
     const updateYourMonsters = async () => {
       let monstersUpdate = []
       for (let tokenIndex = yourMonstersBalancetoNumber - 1; tokenIndex >= 0; tokenIndex--) {
@@ -171,7 +174,7 @@ function App(props) {
           const jsonManifest = await axios({url: tokenURI})
           console.log("jsonManifest",jsonManifest)
           if(jsonManifest){
-            //console.log("manifest",manifest)
+            // console.log("manifest", manifest)
             monstersUpdate.push({ id: tokenId._hex, ...jsonManifest.data })
           }
 
@@ -239,12 +242,22 @@ function App(props) {
     updateYourMaps()
   }, [readContracts, address, yourMonstersBalancetoNumber, yourMapsBalancetoNumber])
 
-  console.log("👹 yourMonsters", yourMonsters)
-  console.log("🗺️ yourMaps", yourMaps)
   let yourMonstersRender = []
   let yourMapsRender = []
   const [ showSend, setShowSend ] = useState({})
   const [ toAddress, setToAddress ] = useState({})
+  const monsterOpenSeaUrl = (id) => {
+    const tokenId = BigNumber.from(id).toString();
+    const osUrl = `https://opensea.io/assets/0xeCb9B2EA457740fBDe58c758E4C574834224413e/${tokenId}`
+    return osUrl;
+
+  }
+  const mapOpenSeaUrl = (id) => {
+    const tokenId = BigNumber.from(id).toString();
+    const osUrl = `https://opensea.io/assets/0x6C8715ade6361D35c941EB901408EFca8A20F65a/${tokenId}`;
+
+    return osUrl;
+  }
 
   for (let c in yourMonsters) {
      let cardActions = []
@@ -328,10 +341,11 @@ function App(props) {
           <AspectRatio maxW="300px" ratio={1}>
             <Image sx={{ maxWidth: 300 }} src={yourMonsters[c].image} />
           </AspectRatio>
-          <Box p={4} color="primaryAlpha.200" fontSize={["md", "lg", "xl"]}>
+          <Box d="flex" flexFlow="column wrap" p={4} color="primaryAlpha.200" fontSize={["md", "lg", "xl"]}>
             <span>
               {yourMonsters[c].name}
             </span>
+            <a href={monsterOpenSeaUrl(yourMonsters[c].id)} target="_blank">View on OpenSea</a>
           </Box>
         </Box>
       </Box>
@@ -421,10 +435,11 @@ function App(props) {
           <AspectRatio maxW="300px" ratio={1}>
             <Image style={{ maxWidth: 300 }} src={yourMaps[c].image} />
           </AspectRatio>
-          <Box p={4} color="primaryAlpha.200" fontSize={["md", "lg", "xl"]}>
+          <Box d="flex" flexFlow="column wrap" p={4} color="primaryAlpha.200" fontSize={["md", "lg", "xl"]}>
             <span>
               {yourMaps[c].name}
             </span>
+            <a href={mapOpenSeaUrl(yourMaps[c].id)} target="_blank">View on OpenSea</a>
           </Box>
         </Box>
       </Box>
@@ -654,6 +669,7 @@ function App(props) {
             <Contract
                 name="Monsters"
                 customContract={monstersContractWrite}
+                readContract={monstersContractRead}
               signer={userProvider.getSigner()}
                 provider={userProvider}
               address={address}
@@ -663,6 +679,7 @@ function App(props) {
             <Contract
                 name="Maps"
                 customContract={mapsContractWrite}
+                readContract={mapsContractRead}
               signer={userProvider.getSigner()}
               provider={userProvider}
               address={address}

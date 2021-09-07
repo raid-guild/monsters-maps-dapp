@@ -12,13 +12,14 @@ import Blockies from "react-blockies";
 const { utils } = require("ethers");
 
 
-export default function FunctionForm({ contractFunction, functionInfo, provider, gasPrice, triggerRefresh }) {
+export default function FunctionForm({ contractFunction, functionInfo, provider, gasPrice, triggerRefresh, currentUser, contract }) {
   const [form, setForm] = useState({});
   const [txValue, setTxValue] = useState();
   const [returnValue, setReturnValue] = useState();
+  const [uri, setUri] = useState();
 
   const tx = Transactor(provider, gasPrice);
-
+  // console.log("🍻 contract: ", contract);
   let inputIndex = 0;
   const inputs = functionInfo.inputs.map(input => {
 
@@ -47,6 +48,22 @@ export default function FunctionForm({ contractFunction, functionInfo, provider,
     }
 
 
+    // const onFormSubmit = async (values) => {
+    //   if (currentUser && contract) {
+
+    //     try {
+    //       const muri = await contract.tokenURI(values.tokenId).call();
+    //       if (muri) {
+    //         const meta = atob(muri.split('base64,')[1]);
+    //         setUri(JSON.parse(meta).image);
+    //         return;
+    //       }
+    //     } catch {
+    //       setUri(undefined);
+    //       console.log('new monster found');
+    //     }
+    //   }
+    // };
 
 
     return (
@@ -116,6 +133,7 @@ export default function FunctionForm({ contractFunction, functionInfo, provider,
   }
 
   const buttonIcon = functionInfo.type === "call" ? <Button style={{ marginLeft: -32 }}>Read📡</Button> : <Button>Mint</Button>;
+
   inputs.push(
     <Box sx={{ cursor: "pointer", margin: 2, flex: "0 0 auto", textAlign: "left" }} key={"goButton"}>
       <Input
@@ -169,13 +187,13 @@ export default function FunctionForm({ contractFunction, functionInfo, provider,
               triggerRefresh(true);
             }}
           >
-            {buttonIcon}
+            {buttonIcon(returnValue)}
           </div>
         }
       />
     </Box>
   );
-  console.log(functionInfo);
+
   if (functionInfo.name === "claim" || functionInfo.name === "discoverEncounters") {
     return (
       <Box>

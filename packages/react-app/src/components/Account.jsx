@@ -1,9 +1,8 @@
 import React from "react";
-import { Button } from "antd";
 import Address from "./Address";
 import Balance from "./Balance";
 import Wallet from "./Wallet";
-import { Box, HStack } from "@chakra-ui/react";
+import { Box, HStack, Button } from "@chakra-ui/react";
 // import { useThemeSwitcher } from "react-css-theme-switcher";
 
 /*
@@ -58,25 +57,22 @@ export default function Account({
       modalButtons.push(
         <Button
           key="logoutbutton"
-          style={{ verticalAlign: "top", marginLeft: 8, marginTop: 0 }}
-          shape="round"
-          size="small"
+          size="sm"
+          sx={{ verticalAlign: "top", marginLeft: 8, marginTop: 0 }}
           onClick={logoutOfWeb3Modal}
         >
-          logout
+          Disconnect
         </Button>,
       );
     } else {
       modalButtons.push(
         <Button
           key="loginbutton"
-          style={{ verticalAlign: "top", marginLeft: 8, marginTop: 0 }}
-          shape="round"
-          size="small"
-          /*type={minimized ? "default" : "primary"}     too many people just defaulting to MM and having a bad time*/
+          size="sm"
+          sx={{ verticalAlign: "top", marginLeft: 8, marginTop: 0 }}
           onClick={loadWeb3Modal}
         >
-          connect
+          Connect
         </Button>,
       );
     }

@@ -52,6 +52,38 @@ export const theme = extendTheme({
         bgAttachment: 'fixed',
         bgSize: "cover"
       },
+      a: {
+        color: 'primaryAlpha.400',
+        _hover: {
+          color: 'primaryAlpha.600',
+        },
+      },
+      "#WEB3_CONNECT_MODAL_ID": {
+        ".web3modal-modal-card": {
+          bg: "secondaryAlpha.900",
+          bgImage: "url(/pixel-gnoll.gif)",
+          backgroundPosition: "bottom left",
+          color: "secondaryAlpha.100",
+        },
+        ".web3modal-modal-hitbox": {
+
+        },
+        ".web3modal-modal-lightbox": {
+          backgroundColor: "rgba(0,0,0,0.6)",
+          backdropFilter: "blur(8px)"
+        },
+        ".web3modal-provider-wrapper": {
+          border: "0px solid transparent",
+          bg: "rgba(0,0,0,0.5)",
+          backdropFilter: "blur(2px)"
+        },
+        ".web3modal-provider-container": {
+          bg: "transparent",
+          ".web3modal-provider-name": {
+            color: "primaryAlpha.500",
+          }
+        }
+      }
     },
   },
 
@@ -67,7 +99,8 @@ export const theme = extendTheme({
     h3: {
       fontFamily: 'Mirza',
       fontSize: ['md', 'lg', 'xl']
-    }
+    },
+
   },
 
   components: {
@@ -121,8 +154,10 @@ export const theme = extendTheme({
       variants: {
         rg: {
           color: 'white',
-          bg: 'black',
+          // bg: 'black',
+          fontSize: ['md', 'lg', 'lg'],
           margin: '5px',
+          // padding: '5px',
           textTransform: 'uppercase',
         },
       },

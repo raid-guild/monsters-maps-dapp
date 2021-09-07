@@ -17,7 +17,8 @@ import { Hints, ExampleUI, Subgraph } from "./views"
 // import { useThemeSwitcher } from "react-css-theme-switcher";
 import { INFURA_ID, NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI, MONSTERS_CONTRACT_ADDRESS, MONSTERS_CONTRACT_ABI, MAPS_CONTRACT_ADDRESS, MAPS_CONTRACT_ABI, NETWORK, NETWORKS } from "./constants";
 import StackGrid from "react-stack-grid"
-import { Box, Heading, HStack, Image, AspectRatio, Button } from "@chakra-ui/react";
+import { Box, Heading, HStack, Image, AspectRatio, Button, Text } from "@chakra-ui/react";
+import { Faq } from "./components/Faq";
 // import { Box, Link } from "@chakra-ui/react";
 /*
     Welcome to 🏗 scaffold-eth !
@@ -146,12 +147,14 @@ function App(props) {
   const [yourCollectibles, setYourCollectibles] = useState()
   const [yourMonsters, setYourMonsters] = useState()
   const [yourMaps, setYourMaps] = useState()
-
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
   const yourMonstersBalancetoNumber = yourMonstersBalance && yourMonstersBalance.toNumber && yourMonstersBalance.toNumber()
 
   const yourMapsBalancetoNumber = yourMapsBalance && yourMapsBalance.toNumber && yourMapsBalance.toNumber()
 
-  useEffect(()=>{
+  useEffect(() => {
+    const connected = window.localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER');
+    connected && setUserLoggedIn(true);
     const updateYourMonsters = async () => {
       let monstersUpdate = []
       for (let tokenIndex = yourMonstersBalancetoNumber - 1; tokenIndex >= 0; tokenIndex--) {
@@ -598,11 +601,20 @@ function App(props) {
         }}>
           <Menu style={{ textAlign: "center", backgroundColor: "transparent", borderColor: "transparent" }} selectedKeys={[route]} mode="horizontal">
           <Menu.Item key="/">
-              <Link onClick={() => { setRoute("/") }} to="/">Collectibles</Link>
-          </Menu.Item>
+              <Link onClick={() => { setRoute("/") }} to="/">Intro</Link>
+            </Menu.Item>
+            <Menu.Item key="/my-monsters">
+              <Link onClick={() => { setRoute("/my-monsters") }} to="/my-monsters">My Monsters</Link>
+            </Menu.Item>
+            <Menu.Item key="/my-maps">
+              <Link onClick={() => { setRoute("/my-maps") }} to="/my-maps">My Maps</Link>
+            </Menu.Item>
           <Menu.Item key="/contract">
-              <Link onClick={() => { setRoute("/contract") }} to="/contract">Contracts</Link>
-          </Menu.Item>
+              <Link onClick={() => { setRoute("/contract") }} to="/contract">Hunt & Mint</Link>
+            </Menu.Item>
+            <Menu.Item key="/faq">
+              <Link onClick={() => { setRoute("/faq") }} to="/faq">FAQ</Link>
+            </Menu.Item>
         </Menu>
         </Box>
         <Switch>
@@ -612,10 +624,31 @@ function App(props) {
                 this <Contract/> component will automatically parse your ABI
                 and give you a form to interact with it locally
             */}
-            {assetsPage}
+            <Box d="flex" alignContent="center" justifyContent="space-between" flexFlow="row nowrap" maxW="780px" margin="0 auto" mt="100px" sx={{}}>
+              <Box textAlign="left" maxW="55%">
+                <Heading>I see your interest is piqued,<br /> curious traveller..</Heading>
 
+
+                <Text>Ever since Monsters and Maps started appearing across the horizon, there have been murmurs in the crowds - What’s the meaning behind all these?</Text>
+
+                <Text>Well, we’ve overheard some rumours, stories and quests, in taverns and inns. Mint monsters & Maps and dive right in.</Text>
+                <HStack mt={5}>
+                  <Button type="primary" onClick={() => { window.open("https://discord.gg/XhMVzsQyqw") }}>Join the community</Button>
+                  {!injectedProvider && <Button type="primary" onClick={loadWeb3Modal}>Login with MetaMask</Button>}
+                </HStack>
+              </Box>
+            </Box>
 
           </Route>
+
+          <Route path="/my-monsters">
+            {stackedMonstersDisplay}
+          </Route>
+
+          <Route path="/my-maps">
+            {stackedMapsDisplay}
+          </Route>
+
           <Route path="/contract">
             <Box d="flex" alignContent="center" justifyContent="space-between" flexFlow="row nowrap" maxW="1280px" margin="0 auto" mt="100px" sx={{}}>
             <Contract
@@ -635,6 +668,15 @@ function App(props) {
               address={address}
               blockExplorer={"https://etherscan.io/"}
             />
+            </Box>
+          </Route>
+
+          <Route path="/faq">
+            <Box maxW="50%" margin="0 auto" mt="100px" sx={{}}>
+              <Heading>FAQ</Heading>
+              <Box>
+                <Faq />
+              </Box>
             </Box>
           </Route>
         </Switch>

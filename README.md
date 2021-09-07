@@ -35,7 +35,7 @@ yarn start
 
 📝 Don't forget to update the **INFURA_ID** in `constants.js` in `packages/react-app/src` before you deploy to prod...
 
-![image](https://user-images.githubusercontent.com/2653167/115158550-f21e5e80-a04b-11eb-8f28-8b91413dc802.png)
+![image](https://media.discordapp.net/attachments/777649232202039326/884633802931068969/unknown.png?width=1255&height=745https://media.discordapp.net/attachments/777649232202039326/884633802931068969/unknown.png?width=1255&height=745)
 
 
 

@@ -59,7 +59,7 @@ export function Faq() {
           </Heading>
           <AccordionPanel pb={4}>
             <Text>There are 2 Etherscan links because there are 2 different NFTs you can mint.
-              We have the Monsters - the creatures and beasts who roam the land.Next, we have the Monster Maps, which show you where each of these Monsters spawn on a Map.</Text>
+              We have the Monsters - the creatures and beasts who roam the land. Next, we have the Monster Maps, which show you where each of these Monsters spawn on a Map.</Text>
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
@@ -72,7 +72,7 @@ export function Faq() {
             </AccordionButton>
           </Heading>
           <AccordionPanel pb={4}>
-            <Text>You can mint either a Monster or a Monster Map.Minting a Monster Map would show you the Monsters on your map, which you can go mint new Monsters!</Text>
+            <Text>You can mint either a Monster or a Monster Map. Minting a Monster Map would show you the Monsters on your map, which you can go mint new Monsters!</Text>
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
@@ -98,7 +98,7 @@ export function Faq() {
             </AccordionButton>
           </Heading>
           <AccordionPanel pb={4}>
-            <Text>Be patient, young traveler.Give Opensea a while and the full image of your Monster / Monster Map will be generated</Text>
+            <Text>Be patient, young traveler. Give Opensea a while and the full image of your Monster / Monster Map will be generated</Text>
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
@@ -111,7 +111,7 @@ export function Faq() {
             </AccordionButton>
           </Heading>
           <AccordionPanel pb={4}>
-            <Text>Monster Maps lives in the wider ecosystem of the Loot project.We are in the process of getting added to Loot's Derivative projects. You do not need to own a Loot to mint or buy a Monster or a Monster Map!</Text>
+            <Text>Monster Maps lives in the wider ecosystem of the Loot project. We are in the process of getting added to Loot's Derivative projects. You do not need to own a Loot to mint or buy a Monster or a Monster Map!</Text>
           </AccordionPanel>
         </AccordionItem>
         <AccordionItem>
@@ -152,7 +152,7 @@ export function Faq() {
           <AccordionPanel pb={4}>
             <Text>RaidGuild. We are A Decentralized Collective of Mercenaries Ready to Slay Your Web3 Product Demons.</Text>
 
-            <Text>We are deeply entrenched in the bleeding edge of DAOs, DeFi, dApps and everything else in between.Hailing from the MetaCartel network, our team consists of a diverse group of talent with over 9000 years of combined experience.</Text>
+            <Text>We are deeply entrenched in the bleeding edge of DAOs, DeFi, dApps and everything else in between. Hailing from the MetaCartel network, our team consists of a diverse group of talent with over 9000 years of combined experience.</Text>
 
             <Text>Find out more at http://raidguild.org/</Text>
           </AccordionPanel>
@@ -167,7 +167,7 @@ export function Faq() {
             </AccordionButton>
           </Heading>
           <AccordionPanel pb={4}>
-            <Text>As part of this emergent storytelling adventure, Quests are narrative - based missions started by Game Masters and shaped by adventurers(like yourself).Join the fight, tell a story and you will be rewarded with booty.</Text>
+            <Text>As part of this emergent storytelling adventure, Quests are narrative - based missions started by Game Masters and shaped by adventurers(like yourself). Join the fight, tell a story and you will be rewarded with booty.</Text>
           </AccordionPanel>
         </AccordionItem>
       </Accordion>

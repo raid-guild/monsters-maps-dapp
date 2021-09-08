@@ -16,7 +16,7 @@ import { formatEther, parseEther } from "@ethersproject/units";
 import axios from "axios";
 import { Hints, ExampleUI, Subgraph } from "./views"
 // import { useThemeSwitcher } from "react-css-theme-switcher";
-import { INFURA_ID, ALCHEMY_ID, NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI, MONSTERS_CONTRACT_ADDRESS, MONSTERS_CONTRACT_ABI, MAPS_CONTRACT_ADDRESS, MAPS_CONTRACT_ABI, NETWORK, NETWORKS } from "./constants";
+import { INFURA_ID, ALCHEMY_ID, POKT_ID, NFT_CONTRACT_ADDRESS, NFT_CONTRACT_ABI, MONSTERS_CONTRACT_ADDRESS, MONSTERS_CONTRACT_ABI, MAPS_CONTRACT_ADDRESS, MAPS_CONTRACT_ABI, NETWORK, NETWORKS } from "./constants";
 import StackGrid from "react-stack-grid"
 import { Box, Heading, HStack, Image, AspectRatio, Button, Text } from "@chakra-ui/react";
 import { Faq } from "./components/Faq";
@@ -67,6 +67,7 @@ if(DEBUG) console.log("📡 Connecting to Mainnet Ethereum");
 const scaffoldEthProvider = new StaticJsonRpcProvider("https://rpc.scaffoldeth.io:48544")
 const mainnetInfura = new StaticJsonRpcProvider("https://mainnet.infura.io/v3/" + INFURA_ID)
 const mainnetAlchemy = new StaticJsonRpcProvider("https://eth-mainnet.alchemyapi.io/v2/" + ALCHEMY_ID)
+const mainnetPokt = new StaticJsonRpcProvider("https://eth-mainnet.gateway.pokt.network/v1/lb/" + POKT_ID)
 // ( ⚠️ Getting "failed to meet quorum" errors? Check your INFURA_I
 
 // 🏠 Your local provider is usually pointed at your local blockchain
@@ -83,7 +84,7 @@ const blockExplorer = targetNetwork.blockExplorer;
 
 function App(props) {
 
-  const mainnetProvider = (scaffoldEthProvider && scaffoldEthProvider._network) ? scaffoldEthProvider : mainnetAlchemy
+  const mainnetProvider = (scaffoldEthProvider && scaffoldEthProvider._network) ? scaffoldEthProvider : mainnetPokt
 
   const [injectedProvider, setInjectedProvider] = useState();
   /* 💵 This hook will get the price of ETH from 🦄 Uniswap: */

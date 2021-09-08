@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
+import { HashRouter, Switch, Route, Link } from "react-router-dom";
 import "antd/dist/antd.css";
 import { StaticJsonRpcProvider, JsonRpcProvider, Web3Provider } from "@ethersproject/providers";
 import { BigNumber } from "@ethersproject/bignumber";
@@ -603,7 +603,7 @@ function App(props) {
       {/* ✏️ Edit the header and change the title to your project name */}
       <Header />
       {networkDisplay}
-      <BrowserRouter>
+      <HashRouter>
 
         <Box marginTop="100px" sx={{
           ".ant-menu-item a": {
@@ -713,7 +713,7 @@ function App(props) {
             </Box>
           </Route>
         </Switch>
-      </BrowserRouter>
+      </HashRouter>
 
       {/* <ThemeSwitch /> */}
 

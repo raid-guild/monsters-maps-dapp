@@ -149,51 +149,41 @@ function App(props) {
   const [yourMonsters, setYourMonsters] = useState()
   const [yourMaps, setYourMaps] = useState()
   const [userLoggedIn, setUserLoggedIn] = useState(false);
+  const [monstersLoading, setMonstersLoading] = useState(true);
+  const [mapsLoading, setMapsLoading] = useState(true);
+
   const yourMonstersBalancetoNumber = yourMonstersBalance && yourMonstersBalance.toNumber && yourMonstersBalance.toNumber()
 
   const yourMapsBalancetoNumber = yourMapsBalance && yourMapsBalance.toNumber && yourMapsBalance.toNumber()
 
+  console.log("your monster bal: ", yourMonstersBalancetoNumber);
 
   useEffect(() => {
-    const connected = window.localStorage.getItem('WEB3_CONNECT_CACHED_PROVIDER');
-    connected && setUserLoggedIn(true);
+    web3Modal.cachedProvider && setUserLoggedIn(true);
 
     const updateYourMonsters = async () => {
+
       let monstersUpdate = []
       for (let tokenIndex = yourMonstersBalancetoNumber - 1; tokenIndex >= 0; tokenIndex--) {
-       try{
+        try {
           //console.log("Getting token index",tokenIndex)
+
          const tokenId = await monstersContractRead.tokenOfOwnerByIndex(address, tokenIndex)
           if(DEBUG&&tokenId)console.log("🆔 tokenId",tokenId)
          const tokenURI = await monstersContractRead.tokenURI(tokenId)
-          if(DEBUG&&tokenURI)console.log("🏷 tokenURI",tokenURI)
+          if (DEBUG && tokenURI) console.log("🏷 tokenURI", tokenURI)
 
           //loading your token information from the tokenURI might work in a few different ways....
 
-          //you might just grab the data from the uri directly:
-          const jsonManifest = await axios({url: tokenURI})
+          const jsonManifest = await axios({ url: tokenURI }, { timeout: 2 })
           console.log("jsonManifest",jsonManifest)
-          if(jsonManifest){
-            // console.log("manifest", manifest)
+          if (jsonManifest) {
             monstersUpdate.push({ id: tokenId._hex, ...jsonManifest.data })
           }
 
-          //Or, a custom call based on tokenID without even loading the uri:
-          //const jsonManifest = await axios({url: "https://www.folia.app/.netlify/functions/metadata/"+tokenId.toNumber()})
+          setMonstersLoading(false);
 
-          // best case, the tokenURI is just an IPFS hash and we can get it there:
-          /*const ipfsHash = tokenURI.substr(tokenURI.lastIndexOf("/")+1)
-          //console.log("#️⃣ ipfsHash",ipfsHash)
-          if(ipfsHash){
-            const jsonManifest = await getFromIPFS(ipfsHash)
-            if(jsonManifest){
-              const manifest = JSON.parse(jsonManifest.toString())
-              //console.log("manifest",manifest)
-              collectibleUpdate.push({ id:tokenId.toNumber(), ...manifest })
-            }
-          }
-          */
-       }catch(e){console.log(e)}
+        } catch (e) { console.log("🀄 Error: ", e) }
         setYourMonsters(monstersUpdate)
       }
 
@@ -218,28 +208,19 @@ function App(props) {
             mapsUpdate.push({ id: tokenId._hex, ...jsonManifest.data })
           }
 
-          //Or, a custom call based on tokenID without even loading the uri:
-          //const jsonManifest = await axios({url: "https://www.folia.app/.netlify/functions/metadata/"+tokenId.toNumber()})
-
-          // best case, the tokenURI is just an IPFS hash and we can get it there:
-          /*const ipfsHash = tokenURI.substr(tokenURI.lastIndexOf("/")+1)
-          //console.log("#️⃣ ipfsHash",ipfsHash)
-          if(ipfsHash){
-            const jsonManifest = await getFromIPFS(ipfsHash)
-            if(jsonManifest){
-              const manifest = JSON.parse(jsonManifest.toString())
-              //console.log("manifest",manifest)
-              collectibleUpdate.push({ id:tokenId.toNumber(), ...manifest })
-            }
-          }
-          */
-        } catch (e) { console.log(e) }
+          setMapsLoading(false);
+        } catch (e) {
+          console.log(e)
+        }
         setYourMaps(mapsUpdate)
       }
 
     }
-    updateYourMonsters()
-    updateYourMaps()
+    if (web3Modal.cachedProvider) {
+      updateYourMonsters()
+      updateYourMaps()
+    }
+
   }, [readContracts, address, yourMonstersBalancetoNumber, yourMapsBalancetoNumber])
 
   let yourMonstersRender = []
@@ -450,47 +431,74 @@ function App(props) {
   const stackedMonstersDisplay = yourMonstersBalance && yourMonstersBalance.toNumber() ? (
     <Box sx={{ pos: "relative", maxWidth: 1280, margin: "auto", marginTop: 24, paddingBottom: 50 }}>
 
-      <Heading size="xl" sx={{ marginBottom: 8, marginTop: 8 }}>
-        {yourMonstersBalance && yourMonstersBalance.toNumber()} {monstersContractName}
-      </Heading>
 
-       <StackGrid
-        columnWidth={300}
-         gutterWidth={16}
-         gutterHeight={32}
-       >
-        {yourMonstersRender}
-       </StackGrid>
 
-      {/* <Box sx={{ fontSize: 25, marginTop: 0, opacity: 0.9, pos: "absolute", top: 0, right: 0 }}>
-        {monstersContractName} smart contract: <Address fontSize={21} minimized={false} address={monstersContractRead && monstersContractRead.address} ensProvider={props.ensProvider} />
-      </Box> */}
+      {!monstersLoading ? (
+        <>
+          <Heading size="xl" sx={{ marginBottom: 8, marginTop: 8 }}>
+            {yourMonstersBalance && yourMonstersBalance.toNumber()} {monstersContractName}
+          </Heading>
+
+          <StackGrid
+            columnWidth={300}
+            gutterWidth={16}
+            gutterHeight={32}
+          >
+            {yourMonstersRender}
+          </StackGrid>
+        </>
+      ) : (
+        <Box sx={{
+          marginTop: 64,
+          ".ant-spin-dot-item": {
+            bgColor: "primaryAlpha.500",
+          }
+        }}><Spin size="large" /></Box>)}
 
     </Box>
-  ) : <div style={{ marginTop: 64 }}>You don't have any monsters</div>
+  ) : (
+    <Box sx={{
+      marginTop: 64,
+    }}>
+      <Text>{"You haven't got any monsters"}</Text>
+    </Box>
+  )
 
 
   const stackedMapsDisplay = yourMapsBalance && yourMapsBalance.toNumber() ? (
     <Box sx={{ pos: "relative", maxWidth: 1280, margin: "auto", marginTop: 24, paddingBottom: 50 }}>
+      {!mapsLoading ? (
+        <>
+          <Heading size="xl" sx={{ marginBottom: 8, marginTop: 8 }}>
+            {yourMapsBalance && yourMapsBalance.toNumber()} {mapsContractName}
+          </Heading>
 
-      <Heading size="xl" sx={{ marginBottom: 8, marginTop: 8 }}>
-        {yourMapsBalance && yourMapsBalance.toNumber()} {mapsContractName}
-      </Heading>
+          <StackGrid
+            columnWidth={300}
+            gutterWidth={16}
+            gutterHeight={32}
+          >
+            {yourMapsRender}
+          </StackGrid>
+        </>
+      ) : (
+        <Box sx={{
+          marginTop: 64,
+          ".ant-spin-dot-item": {
+            bgColor: "primaryAlpha.500",
+          }
+        }}><Spin size="large" /></Box>)}
 
-      <StackGrid
-        columnWidth={300}
-        gutterWidth={16}
-        gutterHeight={32}
-      >
-        {yourMapsRender}
-      </StackGrid>
-
-      {/* <Box sx={{ d: "flex", alignContent: "flex-end", flexFlow: "column wrap", textAlign: "right", fontSize: 25, marginTop: 0, opacity: 0.9, pos: "absolute", top: 0, right: 0 }}>
-        <span>{mapsContractName} smart contract:</span> <Address fontSize={25} minimized={false} address={mapsContractRead && mapsContractRead.address} ensProvider={props.ensProvider} />
-      </Box> */}
 
     </Box>
-  ) : <div style={{ marginTop: 64 }}>You haven't got any maps</div>
+  ) : (
+    <Box sx={{
+      marginTop: 64,
+    }}>
+      <Text>{"You haven't got any maps"}</Text>
+    </Box>
+  )
+
 
   //📟 Listen for broadcast events
   //const setPurposeEvents = useEventListener(readContracts, "YourContract", "SetPurpose", localProvider, 1);
@@ -649,7 +657,7 @@ function App(props) {
                 <Text>Well, we’ve overheard some rumours, stories and quests, in taverns and inns. Mint monsters & Maps and dive right in.</Text>
                 <HStack mt={5}>
                   <Button type="primary" onClick={() => { window.open("https://discord.gg/XhMVzsQyqw") }}>Join the community</Button>
-                  {!injectedProvider && <Button type="primary" onClick={loadWeb3Modal}>Login with MetaMask</Button>}
+                  {!web3Modal.cachedProvider && <Button type="primary" onClick={loadWeb3Modal}>Login with MetaMask</Button>}
                 </HStack>
               </Box>
             </Box>
@@ -657,15 +665,23 @@ function App(props) {
           </Route>
 
           <Route path="/my-monsters">
-            {stackedMonstersDisplay}
+            {web3Modal.cachedProvider ? stackedMonstersDisplay : (
+              <Box sx={{ pos: "relative", maxWidth: 1280, margin: "auto", marginTop: 24, paddingBottom: 50 }}>
+                <Button type="primary" onClick={loadWeb3Modal}>Connect</Button>
+              </Box>
+            )}
           </Route>
 
           <Route path="/my-maps">
-            {stackedMapsDisplay}
+            {web3Modal.cachedProvider ? stackedMapsDisplay : (
+              <Box sx={{ pos: "relative", maxWidth: 1280, margin: "auto", marginTop: 24, paddingBottom: 50 }}>
+                <Button type="primary" onClick={loadWeb3Modal}>Connect</Button>
+              </Box>
+            )}
           </Route>
 
           <Route path="/contract">
-            <Box d="flex" alignContent="center" justifyContent="space-between" flexFlow="row nowrap" maxW="1280px" margin="0 auto" mt="100px" sx={{}}>
+            <Box d="flex" alignContent="center" justifyContent="space-between" flexFlow="row nowrap" maxW="1280px" margin="0 auto" mt="100px">
             <Contract
                 name="Monsters"
                 customContract={monstersContractWrite}

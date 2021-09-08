@@ -3,6 +3,7 @@ import { Card } from "antd";
 import { Box, HStack, Heading } from "@chakra-ui/react";
 import { useContractLoader, useContractExistsAtAddress } from "../../hooks";
 import Account from "../Account";
+import Address from "../Address";
 import DisplayVariable from "./DisplayVariable";
 import FunctionForm from "./FunctionForm";
 
@@ -52,8 +53,6 @@ export default function Contract({ customContract, readContract, account, gasPri
         provider={provider}
         gasPrice={gasPrice}
         triggerRefresh={triggerRefresh}
-        currentUser={account}
-        contract={readContract}
       />
     );
   });
@@ -73,12 +72,9 @@ export default function Contract({ customContract, readContract, account, gasPri
           <Box d="flex" flexFlow="row nowrap" alignContent="center" justifyContent="space-between">
             <Heading size="lg">{name} Contract</Heading>
             <Box>
-              <Account
+              <Address
                 address={address}
-                localProvider={provider}
-                injectedProvider={provider}
                 mainnetProvider={provider}
-                price={price}
                 blockExplorer={blockExplorer}
               />
               {/* {account} */}

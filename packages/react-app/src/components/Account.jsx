@@ -58,7 +58,7 @@ export default function Account({
         <Button
           key="logoutbutton"
           size="sm"
-          sx={{ verticalAlign: "top", marginLeft: 8, marginTop: 0 }}
+          sx={{ marginLeft: 8, marginTop: 0 }}
           onClick={logoutOfWeb3Modal}
         >
           Disconnect
@@ -69,7 +69,7 @@ export default function Account({
         <Button
           key="loginbutton"
           size="sm"
-          sx={{ verticalAlign: "top", marginLeft: 8, marginTop: 0 }}
+          sx={{ marginLeft: 8, marginTop: 0 }}
           onClick={loadWeb3Modal}
         >
           Connect
@@ -78,15 +78,11 @@ export default function Account({
     }
   }
 
-  // const { currentTheme } = useThemeSwitcher();
-
   const display = minimized ? (
     ""
   ) : (
       <>
-      {address ? <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} /> : "Connecting..."}
-        {/* <Balance address={address} provider={localProvider} price={price} /> */}
-        {/* <Wallet address={address} provider={userProvider} ensProvider={mainnetProvider} price={price} /> */}
+        {address && web3Modal.cachedProvider && <Address address={address} ensProvider={mainnetProvider} blockExplorer={blockExplorer} />}
       </>
   );
 

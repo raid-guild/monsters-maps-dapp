@@ -12,7 +12,7 @@ import Blockies from "react-blockies";
 const { utils } = require("ethers");
 
 
-export default function FunctionForm({ contractFunction, functionInfo, provider, gasPrice, triggerRefresh, currentUser, contract }) {
+export default function FunctionForm({ contractFunction, functionInfo, provider, gasPrice, triggerRefresh }) {
   const [form, setForm] = useState({});
   const [txValue, setTxValue] = useState();
   const [returnValue, setReturnValue] = useState();
@@ -187,7 +187,7 @@ export default function FunctionForm({ contractFunction, functionInfo, provider,
               triggerRefresh(true);
             }}
           >
-            {buttonIcon(returnValue)}
+            {buttonIcon}
           </div>
         }
       />

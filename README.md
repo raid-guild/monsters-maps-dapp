@@ -20,7 +20,7 @@ yarn install
 yarn start
 
 ```
-
+*Please use your own provider app id rather than the infura one in .env.example. And make sure to change the values in `constants.js`*
 
 📝 Edit **NFT_CONTRACT_ADDRESS** and **NFT_CONTRACT_ABI** in `constants.js` in `packages/react-app/src`
 
